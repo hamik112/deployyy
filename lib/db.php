@@ -1,6 +1,6 @@
 <?php
 require_once('meekrodb.2.3.class.php');
-DB::$user="root";
-DB::$password='';
-DB::$dbName='ameb'
+DB::$user="hamik112";
+DB::$password='deskjet1';
+DB::$dbName='amazon'
 ?>
