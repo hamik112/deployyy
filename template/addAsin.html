@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ parent() }}
+{% endblock %}
+{% block content %}
+
+<div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Add ASIN</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+			
+			 <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            AMAZON ASIN ADDER
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form role="form" class="form-horizontal" method="POST" action=""> 
+									   <input type="hidden" id="asintype" value="0" name="asintype">
+                                        <div class="form-group">
+                                            <label for="txtasin" class="col-sm-2 control-label">ASIN</label>
+                                            <div class="col-sm-8">
+											    <div id="single-entry">
+													<input type="text" class="form-control" id="txtasin" name="txtasin" placeholder="ASIN" required>
+													<a class="pull-right" href="#" id="href-bulk">Bulk Entry</a>
+												</div>
+												<div id="bulk-entry" style="display:none">
+												  <textarea class="form-control" id="bulkasin" name="bulkasin" placeholder="Each ASIN in new line" rows="10"></textarea>
+												  <a class="pull-right" href="#" id="href-single">Single Entry</a>
+												</div>
+											</div>
+											<div class="col-sm-2">
+											  <button type="submit" name="submit" class="btn btn-primary">Add</button>
+											</div>
+                                        </div>
+									</form>
+								</div>
+							</div>
+                        </div>
+					</div>
+				</div>
+			</div>		
+										
+
+
+{% endblock %}
+
+{% block jschart %} 
+<script type="text/javascript">
+$("#href-bulk").click(function(){
+  var hbulk=$("#bulk-entry");
+  var hsingle=$("#single-entry");
+  hbulk.show();
+  hsingle.hide();
+  $("#asintype").prop("value",1);
+  $("#txtasin").prop("required",false);
+  $("#bulkasin").prop("required",true);
+  return false;
+});
+
+$("#href-single").click(function(){
+  var hbulk=$("#bulk-entry");
+  var hsingle=$("#single-entry");
+  hbulk.hide();
+  hsingle.show();
+  $("#asintype").prop("value",0);
+  $("#txtasin").prop("required",true);
+  $("#bulkasin").prop("required",false);
+  return false;
+});
+
+</script>
+{% endblock %}
+
+
+
+{% block footer %}
+{{ parent() }}
+{% endblock %}

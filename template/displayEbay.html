@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ parent() }}
+<style>
+.checkbox
+{
+ bottom:0;
+ position:absolute;
+ right:0;
+ margin:4px 0 0;
+}
+.img{
+ display:block;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">ASIN's</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+			<form role="form" class="form-horizontal" method="POST" action=""> 
+			 <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            AMAZON ASIN List
+							<button type="submit" name="submit" class="btn btn-primary">Save</button>
+                        </div>
+                        <div class="panel-body">
+                            
+                                   
+									   <table class="table table-striped">
+									   <tr>
+									    <th>Asin</th>
+										<th>Title</th>
+										<th>Price</th>
+										<th>Available</th>
+										<th>FBA</th>
+										<th>Prime</th>
+										<th>last updated</th>
+										<th>Shipping</th>
+										<th>Ebay Fee</th>
+										<th>Paisa Pay Fee</th>
+										<th>Ebay price</th>
+										<th>Ebay Fee</th>
+										<th>Paisa Pay Fee</th>
+										<th>Profit</th>
+										</tr>
+										
+										{% for item in aAsin %}
+										  <tr>
+										   <input type="hidden" name="aID[]" value="{{item.id}}"/>
+										   <td><a href="http://www.amazon.in/dp/{{ item.asin }}" target="_blank">{{ item.asin}}</a></td>
+										   <td>{{ item.title }}</td>
+										   <td><span id="amz_price_{{item.id}}">{{ item.price }}</span></td>
+										   <td>{{ item.availability }}</td>
+										   <td>{{ item.fba }}</td>
+										   <td>{{ item.prime }}</td>
+										   <td>{{ item.date_last_scanned }}</td>
+										   <td><input type="text" class="form-control do_calc" name="ebay_shipping[]" id="ebay_shipping_{{item.id}}"   value="{{item.shipping}}"></td>
+										   <td><input type="text" class="form-control do_calc" name="ebay_fee[]" id="ebay_fee_{{item.id}}" value="{{item.ebay_fee_percentage}}"></td>
+										   <td><input type="text" class="form-control do_calc" name="paisapay_fee[]" id="paisapay_fee_{{item.id}}" value="{{item.paisapay_fee_percentage}}"></td>
+										   <td>
+										   <input type="text" class="form-control do_calc" value="{{item.ebayprice}}" id="ebay_price_{{item.id}}" disabled size="40">
+										   
+										   </td>
+										   <td><input type="text" class="form-control do_calc" value="{{item.ebay_final_fee}}" id="ebay_fee_final_{{item.id}}" disabled size="40"></td>
+										   <td><input type="text" class="form-control do_calc" value="{{item.paisapay_final_fee}}" id="paisapay_fee_final_{{item.id}}" disabled size="40"></td>
+										   <td><input type="text" class="form-control do_calc" value="{{item.profit}}" size="40" id="profit_{{item.id}}" disabled></td>
+										   </tr> 
+										   
+										    
+										   
+										{% endfor %}
+										</table> 
+										
+									</form>
+								
+                        </div>
+					</div>
+				</div>
+			</div>		
+										
+
+
+{% endblock %}
+
+{% block jschart %} 
+<script type="text/javascript">
+
+function roundToTwo(num) {    
+    return +(Math.round(num + "e+2")  + "e-2");
+}
+
+$(".do_calc").blur(function(){
+  var id=$(this).prop("id");
+  id=id.split("_");
+  cnt=id.length-1;
+  id=id[cnt];
+  var amz_price=parseFloat($("#amz_price_" + id).text());
+  var e_sp=parseFloat($("#ebay_shipping_" + id).val());
+  var e_fp=parseFloat($("#ebay_fee_" + id).val());
+  var p_fp=parseFloat($("#paisapay_fee_" + id).val());
+  var e_p=$("#ebay_price_" + id);
+  var e_ff=$("#ebay_fee_final_" + id);
+  var p_ff=$("#paisapay_fee_final_" + id);
+  var p=$("#profit_" + id);
+  var total=amz_price + e_sp;
+  total=total+total*e_fp/100.0+total*p_fp/100.0;
+  var fee=total*(e_fp+p_fp)/100.0;
+  total=amz_price+e_sp+fee;
+  var ebay_price=total;
+  e_p.val(roundToTwo(total));
+  e_ff.val(roundToTwo(total*e_fp/100.0));
+  p_ff.val(roundToTwo(total*p_fp/100.0));
+  fee=total*(e_fp+p_fp)/100.0;
+  var profit=total-amz_price-fee;
+  p.val(roundToTwo(profit));
+  
+  
+});
+
+</script>
+{% endblock %}
+
+
+
+{% block footer %}
+{{ parent() }}
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ parent() }}
+<style>
+.checkbox
+{
+ bottom:0;
+ position:absolute;
+ right:0;
+ margin:4px 0 0;
+}
+.img{
+ display:block;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">ASIN's</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+			<form role="form" class="form-horizontal" method="POST" action=""> 
+			 <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            AMAZON ASIN List
+							<button type="submit" name="submit" class="btn btn-primary">Activate Selected</button>
+                        </div>
+                        <div class="panel-body">
+                            
+                                   
+									   <!--<table class="table table-striped">
+									   <tr>
+									    <th>Asin</th>
+										<th>Title</th>
+										<th>Price</th>
+										<th>Available</th>
+										<th>FBA</th>
+										<th>Prime</th>
+										<th>last updated</th>
+										</tr>-->
+										{% set c=0 %}
+										{% for item in aAsin %}
+										  <!--<tr>
+										   <td><a href="http://www.amazon.in/dp/{{ item.asin }}" target="_blank">{{ item.asin}}</a></td>
+										   <td>{{ item.title }}</td>
+										   <td>{{ item.price }}</td>
+										   <td>{{ item.availability }}</td>
+										   <td>{{ item.fba }}</td>
+										   <td>{{ item.prime }}</td>
+										   <td>{{ item.date_last_scanned }}</td>
+										   </tr> -->
+										   {% if loop.index0%4==0 %}
+										      {% set c=1 %}
+										      <div class="row">
+											{% endif %}
+										    <div class="col-md-3">
+											  <div>
+											    <a href="http://www.amazon.in/dp/{{ item.asin }}" target="_blank">
+											      <img src="{{ item.image }}"/>
+												  
+												 </a> 
+												<input type="checkbox" name="aID[]" value="{{ item.id }}">
+											  </div>	
+											  <div>{{ item.title|slice(0,30) }} </div>
+											  
+											  <div>
+											  Price : <b>{{item.price|number_format(2)}}</b>
+											  {%if item.brand|length>0 %} Brand : <b>{{ item.brand}}</b> {% endif %}
+											  </div>
+											</div>
+											 {% if loop.index%4==0 %}
+											   </div>
+											   {% set c=0 %}
+											 {% endif %}  
+										   
+										{% endfor %}
+										<!--</table> -->
+										{% if c==1 %}
+										  </div>
+										{% endif %}
+									</form>
+								
+                        </div>
+					</div>
+				</div>
+			</div>		
+										
+
+
+{% endblock %}
+
+{% block jschart %} 
+<script type="text/javascript">
+$("#href-bulk").click(function(){
+  var hbulk=$("#bulk-entry");
+  var hsingle=$("#single-entry");
+  hbulk.show();
+  hsingle.hide();
+  $("#asintype").prop("value",1);
+  $("#txtasin").prop("required",false);
+  $("#bulkasin").prop("required",true);
+  return false;
+});
+
+$("#href-single").click(function(){
+  var hbulk=$("#bulk-entry");
+  var hsingle=$("#single-entry");
+  hbulk.hide();
+  hsingle.show();
+  $("#asintype").prop("value",0);
+  $("#txtasin").prop("required",true);
+  $("#bulkasin").prop("required",false);
+  return false;
+});
+
+</script>
+{% endblock %}
+
+
+
+{% block footer %}
+{{ parent() }}
+{% endblock %}
